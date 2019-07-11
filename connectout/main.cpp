@@ -1,3 +1,4 @@
+//在弹出的框中选择rpcap://\Device\NPF_{E09A61AD-3E3C-4929-B99D-F7D84F795B98
 #define HAVE_REMOTE
 #define WIN32
 #include <pcap.h>
