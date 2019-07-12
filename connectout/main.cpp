@@ -6,6 +6,10 @@
 #include <ntddndis.h>
 #include <cstdlib>
 #include <time.h>
+#include <iostream>
+#include <string>
+using namespace std;
+
 #pragma comment(lib, "Packet")
 #pragma comment(lib, "wpcap")
 #pragma comment(lib, "WS2_32")
@@ -32,7 +36,7 @@ void packet_handler(u_char* param, const struct pcap_pkthdr
 	* header, const u_char* pkt_data);
 int main()
 {
-	pcap_if_t* alldevs;
+	pcap_if_t* alldevs;//指向pcap_if_t结构的指针
 	pcap_if_t* d;
 	int inum;
 	int i = 0;
@@ -41,22 +45,24 @@ int main()
 	struct bpf_program fcode;
 	char errbuf[PCAP_ERRBUF_SIZE];
 
-	char szSource[] = PCAP_SRC_IF_STRING;
-	/* Retrieve the device list */
-	if (pcap_findalldevs_ex(szSource, NULL, &alldevs,
-		errbuf) == -1) {
-		fprintf(stderr, "Error in pcap_findalldevs: %s\n",
-			errbuf);
+	char szSource[] = PCAP_SRC_IF_STRING;// #define PCAP_SRC_IF_STRING "rpcap://" 表示本地适配器
+	// 从本地获取网络接口设备列表,存储在alldevs中
+	if (pcap_findalldevs_ex(szSource, NULL, &alldevs,errbuf) == -1) {
+		fprintf(stderr, "Error in pcap_findalldevs: %s\n",errbuf);
 		exit(1);
 	}
-	/* Print the list */
+
+
+	//输出所有网卡信息
 	for (d = alldevs; d; d = d->next) {
-		printf("%d. %s", ++i, d->name);
+		cout << "Num:" << ++i <<"\t" << "name:" << d->name <<"\t";
 		if (d->description)
-			printf(" (%s)\n", d->description);
+			cout << "description:" << d->description << "\t"<<endl;
 		else
-			printf(" (No description available)\n");
+			cout << "No description available" << endl;		
 	}
+
+
 	if (i == 0) {
 		printf("\nNo interfaces found! Make sure WinPcap is installed.\n");
 		return -1;
@@ -69,7 +75,8 @@ int main()
 		pcap_freealldevs(alldevs);
 		return -1;
 	}
-	/* Jump to the selected adapter */
+
+	//Jump to the selected adapter */
 	for (d = alldevs, i = 0; i < inum - 1; d = d->next, i++);
 	/* Open the adapter */
 
@@ -78,6 +85,8 @@ int main()
 		pcap_freealldevs(alldevs);
 		return -1;
 	}
+
+	//用pcap_datalink()检查MAC层，以确保我们处理的是以太网, DLT_EN10MB 代表以太网（10Mb, 100Mb, 1000Mb, 或者更高）
 	if (pcap_datalink(adhandle) != DLT_EN10MB) {
 		fprintf(stderr, "\nThis program works only on Ethernet networks.\n");
 		pcap_freealldevs(alldevs);
@@ -123,31 +132,69 @@ void packet_handler(u_char* param, const struct pcap_pkthdr
 	local_tv_sec = header->ts.tv_sec;
 	localtime_s(&time, &local_tv_sec);
 	printf("%d/%d/%d ", time.tm_year + 1900, time.tm_mon + 1, time.tm_mday);
-	printf("%d:%d:%d,", time.tm_hour, time.tm_min, time.tm_sec);
+	printf("%d:%d:%d ", time.tm_hour, time.tm_min, time.tm_sec);
+	cout << "\t";
 
 	mh = (mac_header*)pkt_data;
 
 	ih = (ip_header*)(pkt_data + sizeof(mac_header)); //length of ethernet header
 
-
+	//目的MAC
+	string szDestMac;
+	char tmpDestMacChar[6];
 	for (int i = 0; i < 5; i++) {
-		printf("%02X-", mh->dest_addr[i]);
+		memset(tmpDestMacChar, 0, 6);
+		sprintf(tmpDestMacChar,"%02X-", mh->dest_addr[i]);
+		szDestMac = szDestMac + tmpDestMacChar;
 	}
-	printf("%02X,", mh->dest_addr[5]);
-	for (int i = 0; i < 3; i++) {
-		printf("%d.", ih->daddr[i]);
-	}
-	printf("%d,", ih->daddr[3]);
+	memset(tmpDestMacChar, 0, 6);
+	sprintf(tmpDestMacChar, "%02X", mh->dest_addr[5]);
+	szDestMac = szDestMac + tmpDestMacChar;
 
+
+	//目的IP
+	string szDestIP;
+	char tmpDestIPchar[10];
+	for (int i = 0; i < 3; i++) {
+		memset(tmpDestIPchar, 0, 10);
+		sprintf(tmpDestIPchar,"%d.", ih->daddr[i]);
+		szDestIP = szDestIP + tmpDestIPchar;
+	}
+	memset(tmpDestIPchar, 0, 10);
+	sprintf(tmpDestIPchar, "%d", ih->daddr[3]);
+	szDestIP = szDestIP + tmpDestIPchar;
+	
+
+
+	//源MAC
+    string szSrcMac;
+	char tmpSrcMacchar[6];
 	for (int i = 0; i < 5; i++) {
-		printf("%02X-", mh->src_addr[i]);
+		memset(tmpSrcMacchar, 0, 6);
+		sprintf(tmpSrcMacchar, "%02X-", mh->src_addr[i]);
+		szSrcMac = szSrcMac + tmpSrcMacchar;
 	}
-	printf("%02X,", mh->src_addr[5]);
+	memset(tmpSrcMacchar, 0, 6);
+	sprintf(tmpSrcMacchar, "%02X", mh->src_addr[5]);
+	szSrcMac = szSrcMac + tmpSrcMacchar;
+	
 
+	//源IP
+	string szSrcIP;
+	char tmpSrcIPchar[10];
 	for (int i = 0; i < 3; i++) {
-		printf("%d.", ih->saddr[i]);
+		memset(tmpSrcIPchar, 0, 10);
+		sprintf(tmpSrcIPchar, "%d.", ih->daddr[i]);
+		szSrcIP = szSrcIP + tmpSrcIPchar;
 	}
-	printf("%d,", ih->saddr[3]);
+	memset(tmpSrcIPchar, 0, 10);
+	sprintf(tmpSrcIPchar, "%d", ih->daddr[3]);
+	szSrcIP = szSrcIP + tmpSrcIPchar;
+
+
+	cout << szSrcMac << "  ---------->  " << szDestMac << "\t" << szSrcIP << "  ------------>  " << szDestIP << endl;
+	
+
 	printf("%d\n", header->len);
 	printf("\n");
 }
