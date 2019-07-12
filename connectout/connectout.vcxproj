@@ -71,7 +71,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>C:\Program Files %28x86%29\WinPcap\WpdPack\Include\pcap;C:\Program Files (x86)\WinPcap\WpdPack\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files (x86)\WinPcap\WpdPack\Lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files (x86)\WinPcap\WpdPack\Lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Program Files (x86)\WinPcap\WpdPack\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\WinPcap\WpdPack\Lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -91,9 +95,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_XKEYCHECK_H;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>wpcap.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,7 +133,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IsIPInRange.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="packet_handler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IsIPInRange.h" />
+    <ClInclude Include="packet_handler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
