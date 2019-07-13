@@ -1,5 +1,9 @@
 #include "IsIPInRange.h"
+
+
 //SplitString ref Url:https://www.cnblogs.com/yuehouse/p/10230589.html
+//分割字符串函数 
+//s:需被分割的字符串  v:存储分割后的字符串  c:分隔符
 void SplitString(const string& s, vector<string>& v, const string& c)
 {
 	string::size_type pos1, pos2;
@@ -16,12 +20,11 @@ void SplitString(const string& s, vector<string>& v, const string& c)
 		v.push_back(s.substr(pos1));
 }
 
-
-
-
-vector<ip_range_to_net> do_ip_range_to_net(vector<ip_range> vip_range) {
-	vector<ip_range_to_net> vip_range_to_net;
-	for (auto it = vip_range.begin();it != vip_range.end(); it++) {
+//将内涵string 类型的IP地址的vector 类型转换成unsigned 的vector类型。
+vector<iprange_uint> convert_iprangestr_to_iprangeuint(vector<iprange_str> vec_iprange_str){
+	vector<iprange_uint> vec_iprange_uint;
+	vector<iprange_uint> vip_range_to_net;
+	for (auto it = vec_iprange_str.begin();it != vec_iprange_str.end(); it++) {
 		vector<string> v1;
 		SplitString(it->start_ip, v1, "."); //可按多个字符来分隔;
 		string tmpstr = v1[0] + v1[1] + v1[2] + v1[3];
@@ -34,10 +37,10 @@ vector<ip_range_to_net> do_ip_range_to_net(vector<ip_range> vip_range) {
 		unsigned int uip_end = stoi(v2[0], 0, 10) * 256 * 256 * 256 + stoi(v2[1], 0, 10) * 256 * 256
 			+ stoi(v2[2], 0, 10) * 256 + stoi(v2[3], 0, 10);
 
-		ip_range_to_net ip_range_to_netobj;
-		ip_range_to_netobj.start_ip = uip_start;
-		ip_range_to_netobj.end_ip = uip_end;
-		vip_range_to_net.push_back(ip_range_to_netobj);
+		iprange_uint iprange_uintobj;
+		iprange_uintobj.start_ip = uip_start;
+		iprange_uintobj.end_ip = uip_end;
+		vec_iprange_uint.push_back(iprange_uintobj);
 		
 
 	}
@@ -46,17 +49,21 @@ vector<ip_range_to_net> do_ip_range_to_net(vector<ip_range> vip_range) {
 }
 
 
-
-bool isIPInRange(string szIP, vector<ip_range> vec_iprange) {
+//检测IP地址是否在指定的IP地址范围内；在范围内范围true，否则范围false；
+//szIP :需检测的IP 
+//vec_iprange_str :vector 类型的IP范围;
+bool isIPInRange(string szIP, vector<iprange_str> vec_iprange_str) {
 	vector<string> v;
 	SplitString(szIP, v, "."); 
 	string tmpstr = v[0] + v[1] + v[2] + v[3];
 	unsigned int uip= stoi(v[0], 0, 10) * 256 * 256 * 256 + stoi(v[1], 0, 10) * 256 * 256
 		+ stoi(v[2], 0, 10) * 256 + stoi(v[3], 0, 10);
 
-	vector<ip_range_to_net>  ip_range_to_netobj;
-	ip_range_to_netobj = do_ip_range_to_net(vec_iprange);
-	for (auto it = ip_range_to_netobj.begin();it != ip_range_to_netobj.end();it++) {
+
+	vector<iprange_uint>  vec_iprange_uintobj;
+	
+	vec_iprange_uintobj = convert_iprangestr_to_iprangeuint(vec_iprange_str);
+	for (auto it = vec_iprange_uintobj.begin();it != vec_iprange_uintobj.end();it++) {
 		if (uip >= it->start_ip and uip <= it->end_ip) {
 			return 1;
 		}

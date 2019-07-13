@@ -18,31 +18,22 @@ using namespace std;
 #pragma comment(lib, "WS2_32")
 
 
-
-
-
-
-
 int main()
 {
+	vector<iprange_str> vec_iprange_str;
+	iprange_str iprange_strobj;
 
-	//string s = "192.168.20.1";
-	//vector<string> v;
-	//SplitString(s, v, "."); //可按多个字符来分隔;
-	//cout << "ssssssssssssssss:" << v[0] << endl;
+	iprange_strobj.start_ip = "192.168.0.1";
+	iprange_strobj.end_ip = "192.168.0.10";
+	vec_iprange_str.push_back(iprange_strobj);
 
-	vector<ip_range> vec_ip_range;
-	ip_range ip_rangeobj;
-	ip_rangeobj.start_ip = "192.168.0.1";
-	ip_rangeobj.end_ip = "192.168.0.10";
+	iprange_strobj.start_ip = "192.168.2.0";
+	iprange_strobj.end_ip = "192.168.2.10";
+	vec_iprange_str.push_back(iprange_strobj);
 
-	vec_ip_range.push_back(ip_rangeobj);
+	string szIP = "192.168.3.1";
 
-	//ip_rangeobj.start_ip = "192.168.2.0";
-	//ip_rangeobj.end_ip = "192.168.2.10";
-	//vec_ip_range.push_back(ip_rangeobj);
-	string szIP = "192.168.2.1";
-	if (isIPInRange(szIP, vec_ip_range) == 1) {
+	if (isIPInRange(szIP, vec_iprange_str) == true) {
 		cout << "inrange";
 
 	}

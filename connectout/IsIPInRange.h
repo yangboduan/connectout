@@ -3,16 +3,16 @@
 #include <vector>
 using std::string;
 using std::vector;
-typedef struct ip_range_to_net
+typedef struct iprange_uint
 {
 	unsigned int start_ip;
 	unsigned int end_ip;
-} ip_range_to_net;
+} iprange_uint;
 
-typedef struct ip_range {
+typedef struct iprange_str {
 	string start_ip;
 	string end_ip;
-} ip_range;
+} iprange_str;
 void SplitString(const string& s, vector<string>& v, const string& c);
-vector<ip_range_to_net> do_ip_range_to_net(vector<ip_range> vip_range);
-bool isIPInRange(string szIP, vector<ip_range> vec_iprange);
+vector<iprange_uint> convert_iprangestr_to_iprangeuint(vector<iprange_str> vec_iprange_str);
+bool isIPInRange(string szIP, vector<iprange_str> vec_iprange);
