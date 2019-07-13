@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include "packet_handler.h"
+#include "IsIPInRange.h"
 using namespace std;
 #pragma comment(lib,"wpcap")
 #pragma comment(lib, "Packet")
@@ -24,6 +25,32 @@ using namespace std;
 
 int main()
 {
+
+	//string s = "192.168.20.1";
+	//vector<string> v;
+	//SplitString(s, v, "."); //可按多个字符来分隔;
+	//cout << "ssssssssssssssss:" << v[0] << endl;
+
+	vector<ip_range> vec_ip_range;
+	ip_range ip_rangeobj;
+	ip_rangeobj.start_ip = "192.168.0.1";
+	ip_rangeobj.end_ip = "192.168.0.10";
+
+	vec_ip_range.push_back(ip_rangeobj);
+
+	//ip_rangeobj.start_ip = "192.168.2.0";
+	//ip_rangeobj.end_ip = "192.168.2.10";
+	//vec_ip_range.push_back(ip_rangeobj);
+	string szIP = "192.168.2.1";
+	if (isIPInRange(szIP, vec_ip_range) == 1) {
+		cout << "inrange";
+
+	}
+	else {
+		cout << "no inrange";
+	}
+	cout << endl;
+
 	pcap_if_t* alldevs;//指向pcap_if_t结构的指针
 	pcap_if_t* d;
 	int inum;
