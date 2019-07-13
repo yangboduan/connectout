@@ -24,12 +24,18 @@
     <ClCompile Include="IsIPInRange.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="myGetAdaptersInfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="packet_handler.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="IsIPInRange.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="myGetAdaptersInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

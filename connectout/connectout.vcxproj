@@ -135,10 +135,12 @@
   <ItemGroup>
     <ClCompile Include="IsIPInRange.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="myGetAdaptersInfo.cpp" />
     <ClCompile Include="packet_handler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IsIPInRange.h" />
+    <ClInclude Include="myGetAdaptersInfo.h" />
     <ClInclude Include="packet_handler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -11,36 +11,29 @@
 #include <vector>
 #include "packet_handler.h"
 #include "IsIPInRange.h"
+#include "myGetAdaptersInfo.h"
 using namespace std;
 #pragma comment(lib,"wpcap")
 #pragma comment(lib, "Packet")
 #pragma comment(lib, "wpcap")
 #pragma comment(lib, "WS2_32")
 
+vector<iprange_str> g_vec_iprange_str;
 
 int main()
 {
-	vector<iprange_str> vec_iprange_str;
+	myGetAdaptersInfo();
 	iprange_str iprange_strobj;
 
 	iprange_strobj.start_ip = "192.168.0.1";
 	iprange_strobj.end_ip = "192.168.0.10";
-	vec_iprange_str.push_back(iprange_strobj);
+	g_vec_iprange_str.push_back(iprange_strobj);
 
-	iprange_strobj.start_ip = "192.168.2.0";
-	iprange_strobj.end_ip = "192.168.2.10";
-	vec_iprange_str.push_back(iprange_strobj);
-
-	string szIP = "192.168.3.1";
-
-	if (isIPInRange(szIP, vec_iprange_str) == true) {
-		cout << "inrange";
-
-	}
-	else {
-		cout << "no inrange";
-	}
-	cout << endl;
+	iprange_strobj.start_ip = "0.0.0.0";
+	iprange_strobj.end_ip = "255.255.255.255";
+	g_vec_iprange_str.push_back(iprange_strobj);
+	
+	
 
 	pcap_if_t* alldevs;//指向pcap_if_t结构的指针
 	pcap_if_t* d;

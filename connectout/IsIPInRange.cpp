@@ -1,4 +1,7 @@
 #include "IsIPInRange.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 
 //SplitString ref Url:https://www.cnblogs.com/yuehouse/p/10230589.html
@@ -23,7 +26,7 @@ void SplitString(const string& s, vector<string>& v, const string& c)
 //将内涵string 类型的IP地址的vector 类型转换成unsigned 的vector类型。
 vector<iprange_uint> convert_iprangestr_to_iprangeuint(vector<iprange_str> vec_iprange_str){
 	vector<iprange_uint> vec_iprange_uint;
-	vector<iprange_uint> vip_range_to_net;
+	
 	for (auto it = vec_iprange_str.begin();it != vec_iprange_str.end(); it++) {
 		vector<string> v1;
 		SplitString(it->start_ip, v1, "."); //可按多个字符来分隔;
@@ -45,7 +48,7 @@ vector<iprange_uint> convert_iprangestr_to_iprangeuint(vector<iprange_str> vec_i
 
 	}
 
-	return vip_range_to_net;
+	return vec_iprange_uint;
 }
 
 
@@ -59,16 +62,15 @@ bool isIPInRange(string szIP, vector<iprange_str> vec_iprange_str) {
 	unsigned int uip= stoi(v[0], 0, 10) * 256 * 256 * 256 + stoi(v[1], 0, 10) * 256 * 256
 		+ stoi(v[2], 0, 10) * 256 + stoi(v[3], 0, 10);
 
-
 	vector<iprange_uint>  vec_iprange_uintobj;
 	
 	vec_iprange_uintobj = convert_iprangestr_to_iprangeuint(vec_iprange_str);
-	for (auto it = vec_iprange_uintobj.begin();it != vec_iprange_uintobj.end();it++) {
+	
+	for (auto it = vec_iprange_uintobj.begin();it != vec_iprange_uintobj.end(); it++) {
 		if (uip >= it->start_ip and uip <= it->end_ip) {
-			return 1;
-		}
-		
+			return true;
+		}		
 	}
 
-	return 0;
+	return false;
 }

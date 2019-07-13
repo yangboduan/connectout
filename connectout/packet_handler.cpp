@@ -3,10 +3,13 @@
 #include <time.h>
 #include <iostream>
 #include <string>
-
+#include "IsIPInRange.h"
+extern vector<iprange_str> g_vec_iprange_str;//在main.cpp中被定义
 using std::cout;
 using std::endl;
 using std::string;
+
+
 typedef struct ip_header {
 	u_char ver_ihl; // Version (4 bits) + Internet header length(4 bits) 
 	u_char tos; // Type of service
@@ -20,6 +23,8 @@ typedef struct ip_header {
 	u_char daddr[4]; // Destination address
 	u_int op_pad; // Option + Padding
 } ip_header;
+
+
 typedef struct mac_header {
 	u_char dest_addr[6];
 	u_char src_addr[6];
@@ -36,7 +41,6 @@ void packet_handler(u_char* param, const struct pcap_pkthdr
 	time_t local_tv_sec;
 	struct tm time;
 	char timestr[16];
-
 
 
 	/* 将时间戳转换成可识别的格式 */
@@ -104,8 +108,16 @@ void packet_handler(u_char* param, const struct pcap_pkthdr
 
 
 	cout << szSrcMac << "  ---------->  " << szDestMac << "\t" << szSrcIP << "  ------------>  " << szDestIP << endl;
+	string szISRange_result;
+	if (isIPInRange(szSrcIP, g_vec_iprange_str) == true) {
+		szISRange_result = "yes";
 
+	}
+	else {
+		szISRange_result = "no";
+	}
+	cout << "is in range:"<< szISRange_result<<endl;
 
-	printf("%d\n", header->len);
+	//printf("%d\n", header->len);
 	printf("\n");
 }
