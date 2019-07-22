@@ -2,12 +2,16 @@
 #include <WinSock2.h>
 #include <Iphlpapi.h>
 #include <iostream>
+#include <string.h>
+
 #include "myGetAdaptersInfo.h"
 using namespace std;
 #pragma comment(lib,"Iphlpapi.lib") //需要添加Iphlpapi.lib库
 
-int myGetAdaptersInfo() {
+map<string, string>  myGetAdaptersInfo() {
 	{
+		map<string , string> map_desc_adapt;
+		
 		//PIP_ADAPTER_INFO结构体指针存储本机网卡信息
 		PIP_ADAPTER_INFO pIpAdapterInfo = new IP_ADAPTER_INFO();
 		//得到结构体大小,用于GetAdaptersInfo参数
@@ -36,60 +40,54 @@ int myGetAdaptersInfo() {
 			 //可能有多网卡,因此通过循环去判断
 			while (pIpAdapterInfo)
 			{
-				cout << "网卡数量：" << ++netCardNum << endl;
-				cout << "网卡名称：" << pIpAdapterInfo->AdapterName << endl;
-				cout << "网卡描述：" << pIpAdapterInfo->Description << endl;
+
+				string szTmp ="rpcap://\\Device\\NPF_"; //已转义，原为:rpcap://\Device\NPF_
+				//加上“rpcap://\Device\NPF_”为适应pcap_findalldevs_ex函数获取的信息
+				string szAdapterName = szTmp + (pIpAdapterInfo->AdapterName);//{7C8EE3A4-967A-4AB6-99C5-6FA082B4A74A}
+				string szDescription = pIpAdapterInfo->Description;//Realtek USB GbE Family Controller
+				
+				
 				switch (pIpAdapterInfo->Type)
 				{
 				case MIB_IF_TYPE_OTHER:
-					cout << "网卡类型：" << "OTHER" << endl;
+					//cout << "网卡类型：" << "OTHER" << endl;
 					break;
 				case MIB_IF_TYPE_ETHERNET:
-					cout << "网卡类型：" << "ETHERNET" << endl;
+					//cout << "网卡类型：" << "ETHERNET" << endl;
 					break;
 				case MIB_IF_TYPE_TOKENRING:
-					cout << "网卡类型：" << "TOKENRING" << endl;
+					//cout << "网卡类型：" << "TOKENRING" << endl;
 					break;
 				case MIB_IF_TYPE_FDDI:
-					cout << "网卡类型：" << "FDDI" << endl;
+					//cout << "网卡类型：" << "FDDI" << endl;
 					break;
 				case MIB_IF_TYPE_PPP:
-					printf("PP\n");
-					cout << "网卡类型：" << "PPP" << endl;
+					//printf("PP\n");
+					//cout << "网卡类型：" << "PPP" << endl;
 					break;
 				case MIB_IF_TYPE_LOOPBACK:
-					cout << "网卡类型：" << "LOOPBACK" << endl;
+					//cout << "网卡类型：" << "LOOPBACK" << endl;
 					break;
 				case MIB_IF_TYPE_SLIP:
-					cout << "网卡类型：" << "SLIP" << endl;
+					//cout << "网卡类型：" << "SLIP" << endl;
 					break;
 				default:
-
+				
 					break;
 				}
-				cout << "网卡MAC地址：";
-				for (DWORD i = 0; i < pIpAdapterInfo->AddressLength; i++)
-					if (i < pIpAdapterInfo->AddressLength - 1)
-					{
-						printf("%02X-", pIpAdapterInfo->Address[i]);
-					}
-					else
-					{
-						printf("%02X\n", pIpAdapterInfo->Address[i]);
-					}
-				cout << "网卡IP地址如下：" << endl;
-				//可能网卡有多IP,因此通过循环去判断
-				IP_ADDR_STRING* pIpAddrString = &(pIpAdapterInfo->IpAddressList);
-				do
-				{
-					cout << "该网卡上的IP数量：" << ++IPnumPerNetCard << endl;
-					cout << "IP 地址：" << pIpAddrString->IpAddress.String << endl;
-					cout << "子网地址：" << pIpAddrString->IpMask.String << endl;
-					cout << "网关地址：" << pIpAdapterInfo->GatewayList.IpAddress.String << endl;
-					pIpAddrString = pIpAddrString->Next;
-				} while (pIpAddrString);
+				//过滤掉名称中含"Wi-Fi Direct"的网卡
+				if (!strstr(szDescription.c_str(),"Wi-Fi Direct")) {
+					/*cout << "网卡数量：" << ++netCardNum << endl;
+					cout << "网卡名称：" << szAdapterName << endl;
+					cout << "网卡描述：" << szDescription << endl;
+					cout << "--------------------------------------------------------------------" << endl;*/
+
+					map_desc_adapt.insert(pair<string, string>(szAdapterName,szDescription ));
+				}
+				
+				
 				pIpAdapterInfo = pIpAdapterInfo->Next;
-				cout << "--------------------------------------------------------------------" << endl;
+				
 			}
 
 		}
@@ -99,6 +97,6 @@ int myGetAdaptersInfo() {
 			delete pIpAdapterInfo;
 		}
 
-		return 0;
+		return map_desc_adapt;
 	}
 }

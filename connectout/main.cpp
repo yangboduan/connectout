@@ -22,7 +22,9 @@ vector<iprange_str> g_vec_iprange_str;
 
 int main()
 {
-	myGetAdaptersInfo();
+	map<string, string> map_desc_adapt;
+	map_desc_adapt = myGetAdaptersInfo();
+	
 	iprange_str iprange_strobj;
 
 	iprange_strobj.start_ip = "192.168.0.1";
@@ -51,14 +53,23 @@ int main()
 		exit(1);
 	}
 
+	map<int, string> map_num_adaptname;
 
 	//输出所有网卡信息
 	for (d = alldevs; d; d = d->next) {
-		cout << "Num:" << ++i <<"\t" << "name:" << d->name <<"\t";
+		/*string tmpname = d->name;
+		cout << "num:" << ++i <<"\t" << "name:" << d->name <<"length:"<<tmpname.length()<<"\t";
 		if (d->description)
 			cout << "description:" << d->description << "\t"<<endl;
 		else
-			cout << "No description available" << endl;		
+			cout << "no description available" << endl;	*/
+		
+		auto iter = map_desc_adapt.find(d->name);
+		if (iter != map_desc_adapt.end()) {
+			cout << "Num:" << ++i << "\t" << "网卡名称:" << iter->second <<endl;
+			map_num_adaptname.insert(pair<int, string>(i, iter->first));
+		}
+		
 	}
 
 
@@ -78,8 +89,11 @@ int main()
 	//Jump to the selected adapter */
 	for (d = alldevs, i = 0; i < inum - 1; d = d->next, i++);
 	/* Open the adapter */
+	auto iter = map_num_adaptname.find(inum);
+	//string tmpstr = iter->second;
+	//d->name = tmpstr.c_str();
 
-	if ((adhandle = pcap_open(d->name, 65536, PCAP_OPENFLAG_PROMISCUOUS, 1000, NULL, errbuf)) == NULL) {
+	if ((adhandle = pcap_open(iter->second.c_str(), 65536, PCAP_OPENFLAG_PROMISCUOUS, 1000, NULL, errbuf)) == NULL) {
 		fprintf(stderr,"%s", "\nUnable to open the adapter. %s is not supported by WinPcap\n");
 		pcap_freealldevs(alldevs);
 		return -1;
@@ -107,7 +121,12 @@ int main()
 		pcap_freealldevs(alldevs);
 		return -1;
 	}
-	printf("\nlistening on %s...\n", d->description);
+	auto iter2 = map_desc_adapt.find(iter->second);
+	if (iter2 != map_desc_adapt.end()) {
+		cout <<"listening on " << iter2->second <<endl;
+	}
+	
+	//printf("\nlistening on %s...\n", iter2->first);
 	/* At this point, we don't need any more the device list.
 	Free it */
 	pcap_freealldevs(alldevs);
