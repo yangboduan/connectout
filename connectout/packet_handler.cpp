@@ -40,7 +40,7 @@ void packet_handler(u_char* param, const struct pcap_pkthdr
 	ip_header* ih;
 	time_t local_tv_sec;
 	struct tm time;
-	char timestr[16];
+	//char timestr[16];
 
 
 	/* 将时间戳转换成可识别的格式 */

@@ -10,7 +10,7 @@ using namespace std;
 
 map<string, string>  myGetAdaptersInfo() {
 	{
-		map<string , string> map_desc_adapt;
+		map<string , string> map_adapt_desc;
 		
 		//PIP_ADAPTER_INFO结构体指针存储本机网卡信息
 		PIP_ADAPTER_INFO pIpAdapterInfo = new IP_ADAPTER_INFO();
@@ -82,7 +82,7 @@ map<string, string>  myGetAdaptersInfo() {
 					cout << "网卡描述：" << szDescription << endl;
 					cout << "--------------------------------------------------------------------" << endl;*/
 
-					map_desc_adapt.insert(pair<string, string>(szAdapterName,szDescription ));
+					map_adapt_desc.insert(pair<string, string>(szAdapterName,szDescription ));
 				}
 				
 				
@@ -97,6 +97,6 @@ map<string, string>  myGetAdaptersInfo() {
 			delete pIpAdapterInfo;
 		}
 
-		return map_desc_adapt;
+		return map_adapt_desc;
 	}
 }

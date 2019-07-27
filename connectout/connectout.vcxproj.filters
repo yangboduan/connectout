@@ -27,6 +27,12 @@
     <ClCompile Include="myGetAdaptersInfo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="mythead.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="capture_packet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="packet_handler.h">
@@ -36,6 +42,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="myGetAdaptersInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mythead.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="capture_packet.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
