@@ -4,4 +4,4 @@
 #include <windows.h>
 using namespace std;
 using std::string;
-DWORD capture_packet(LPVOID szAdaptName);
+int capture_packet(string szAdaptName);

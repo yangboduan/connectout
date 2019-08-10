@@ -11,12 +11,12 @@
 using namespace std;
 #pragma comment(lib,"wpcap")
 //int capture_packet(string szAdaptName)
-DWORD capture_packet(LPVOID szAdaptName) {
+int  capture_packet(string szAdaptName) {
 	//获取网卡名和描述的对应关系
-	string * a = (string *)szAdaptName;
+	
 	char errbuf[PCAP_ERRBUF_SIZE];
 	pcap_t* adhandle;
-	if ((adhandle = pcap_open(a->c_str(), 65536, PCAP_OPENFLAG_PROMISCUOUS, 1000, NULL, errbuf)) == NULL) {
+	if ((adhandle = pcap_open(szAdaptName.c_str(), 65536, PCAP_OPENFLAG_PROMISCUOUS, 1000, NULL, errbuf)) == NULL) {
 		fprintf(stderr, "%s", "\nUnable to open the adapter. %s is not supported by WinPcap\n");
 
 		return -1;
@@ -34,7 +34,7 @@ DWORD capture_packet(LPVOID szAdaptName) {
 	struct bpf_program fcode;
 	bpf_u_int32 mask;
 	bpf_u_int32 net;
-	pcap_lookupnet(a->c_str(), &net, &mask, errbuf);
+	pcap_lookupnet(szAdaptName.c_str(), &net, &mask, errbuf);
 	if (pcap_compile(adhandle, &fcode, "ip", 1, mask) < 0) {
 		fprintf(stderr, "\nUnable to compile the packet filter. Check the syntax.\n");
 

@@ -77,10 +77,10 @@ map<string, string>  myGetAdaptersInfo() {
 				}
 				//过滤掉名称中含"Wi-Fi Direct"的网卡
 				if (!strstr(szDescription.c_str(),"Wi-Fi Direct")) {
-					/*cout << "网卡数量：" << ++netCardNum << endl;
+					cout << "网卡数量：" << ++netCardNum << endl;
 					cout << "网卡名称：" << szAdapterName << endl;
 					cout << "网卡描述：" << szDescription << endl;
-					cout << "--------------------------------------------------------------------" << endl;*/
+					cout << "--------------------------------------------------------------------" << endl;
 
 					map_adapt_desc.insert(pair<string, string>(szAdapterName,szDescription ));
 				}

@@ -99,11 +99,11 @@ void packet_handler(u_char* param, const struct pcap_pkthdr
 	char tmpSrcIPchar[10];
 	for (int i = 0; i < 3; i++) {
 		memset(tmpSrcIPchar, 0, 10);
-		sprintf(tmpSrcIPchar, "%d.", ih->daddr[i]);
+		sprintf(tmpSrcIPchar, "%d.", ih->saddr[i]);
 		szSrcIP = szSrcIP + tmpSrcIPchar;
 	}
 	memset(tmpSrcIPchar, 0, 10);
-	sprintf(tmpSrcIPchar, "%d", ih->daddr[3]);
+	sprintf(tmpSrcIPchar, "%d", ih->saddr[3]);
 	szSrcIP = szSrcIP + tmpSrcIPchar;
 
 

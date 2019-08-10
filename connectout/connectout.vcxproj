@@ -139,6 +139,7 @@
     <ClCompile Include="myGetAdaptersInfo.cpp" />
     <ClCompile Include="mythead.cpp" />
     <ClCompile Include="packet_handler.cpp" />
+    <ClCompile Include="print_adapt_info.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="capture_packet.h" />
@@ -146,6 +147,8 @@
     <ClInclude Include="myGetAdaptersInfo.h" />
     <ClInclude Include="mythead.h" />
     <ClInclude Include="packet_handler.h" />
+    <ClInclude Include="print_adpat_info.h" />
+    <ClInclude Include="ThreadPool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
