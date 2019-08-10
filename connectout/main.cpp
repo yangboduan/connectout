@@ -18,7 +18,9 @@
 #include <map>
 #include <thread>         // std::thread  
 #include "ThreadPool.h"
+#include "getconfigcontent.h"
 #include <windows.h>
+#include "splitStringToVect.h"
 using namespace std;
 #pragma comment(lib,"wpcap")
 #pragma comment(lib, "Packet")
@@ -67,10 +69,33 @@ int main()
 	iprange_strobj.end_ip = "192.168.0.10";
 	g_vec_iprange_str.push_back(iprange_strobj);
 
-	iprange_strobj.start_ip = "0.0.0.0";
+	/*iprange_strobj.start_ip = "0.0.0.0";
 	iprange_strobj.end_ip = "255.255.255.255";
-	g_vec_iprange_str.push_back(iprange_strobj);
+	g_vec_iprange_str.push_back(iprange_strobj);*/
 
+	string szIP_range=getconfigcontent();
+	
+	vector<string>   destVect;
+	splitStringToVect(szIP_range, destVect, ";"); 
+	
+	for (auto iter = destVect.begin(); iter != destVect.end(); iter++) {
+		vector<string>   ip_src_dest_Vect;
+		cout << "ip:" << *iter << endl;
+		splitStringToVect(*iter, ip_src_dest_Vect, "-");
+		int i = 1;
+		for (auto iter2 = ip_src_dest_Vect.begin(); iter2 != ip_src_dest_Vect.end(); iter2++) {
+			if (i == 1) {
+				cout << "strart_IP:" << *iter2 << endl;
+				iprange_strobj.start_ip = *iter2;
+			}
+			else {
+				cout << "end_IP:" << *iter2 << endl;
+				iprange_strobj.end_ip = *iter2;
+			}
+			i++;
+		}
+		g_vec_iprange_str.push_back(iprange_strobj);
+	}
 
 	////获取网卡名和描述的对应关系
 	//map<string, string> map_name_desc;
@@ -89,12 +114,6 @@ int main()
 	pool.enqueue(myfun);
 	/*pool.enqueue(capture_packet, tmpstr);
 	pool.enqueue(capture_packet, tmpstr2);*/
-
-
-
-
-
-
 
 	system("pause");
 	return 0;

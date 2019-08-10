@@ -36,6 +36,12 @@
     <ClCompile Include="print_adapt_info.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="getconfigcontent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="splitStringToVect.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="packet_handler.h">
@@ -57,6 +63,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="print_adpat_info.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="getconfigcontent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="splitStringToVect.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

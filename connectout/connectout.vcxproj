@@ -134,20 +134,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="capture_packet.cpp" />
+    <ClCompile Include="getconfigcontent.cpp" />
     <ClCompile Include="IsIPInRange.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="myGetAdaptersInfo.cpp" />
     <ClCompile Include="mythead.cpp" />
     <ClCompile Include="packet_handler.cpp" />
     <ClCompile Include="print_adapt_info.cpp" />
+    <ClCompile Include="splitStringToVect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="capture_packet.h" />
+    <ClInclude Include="getconfigcontent.h" />
     <ClInclude Include="IsIPInRange.h" />
     <ClInclude Include="myGetAdaptersInfo.h" />
     <ClInclude Include="mythead.h" />
     <ClInclude Include="packet_handler.h" />
     <ClInclude Include="print_adpat_info.h" />
+    <ClInclude Include="splitStringToVect.h" />
     <ClInclude Include="ThreadPool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
